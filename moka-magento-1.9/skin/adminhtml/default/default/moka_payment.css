@@ -1,0 +1,19 @@
+/* Orders / Invoices / Shipments / Credit Memos Table */
+.order-tables2 td h5.title { font-size:1em; font-weight:bold; }
+.order-tables2 td .option-label { font-weight:bold; font-style:italic; }
+.order-tables2 td .option-value { padding-left:10px; }
+.order-tables2 td .qty-table { border:0 !important; width:100% }
+.order-tables2 td .qty-table td { border:0 !important; padding:0 4px !important; }
+
+.odd			{ background:#fff !important; }
+.acquired		{ background:#BBFFBE !important; }
+.blocked		{ background:#FFB7B7 !important; }
+
+.detail_show_button
+{
+	color: black;
+	width: 70px;
+	font-size:11px;
+	font-family:verdana,helvetica,arial,times;
+}
+

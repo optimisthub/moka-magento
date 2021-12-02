@@ -1,0 +1,304 @@
+<?php
+/**
+
+	Uretici..........: Moka 
+	Yazılımın Adı....: Moka_Payment // moka.com için Magento Tahsilat Modülü
+	Geliştiren.......: Hidayet Ok <hidayet@grinet.com.tr>
+	Web..............: https://www.moka.com/
+
+	/// Yasal Uyarı /////////////////////////////////////////////////////////////////////////
+
+	Tüm hakları MOKA ÖDEME KURULUŞU A.Ş.'ne aittir.
+
+*/
+?>
+<?php 
+
+	$_all_items = $this->LogHistory(); 
+
+	$_items		= $_all_items["items"];
+	
+	$turkpay = Mage::getModel('Grinet_moka_Model_Grinet');
+
+?>
+<h3><?php echo __('Moka Payment / Kredi Kartı İşlem Detayları');?></h3>
+<div class="grid np">
+  <div class="hor-scroll">
+    <table cellspacing="0" class="data order-tables">
+        <col width="1" />
+        <col width="1" />
+        <col width="1" />
+        <col />
+        <thead>
+            <tr class="headings">
+                <th style="width:40px;"	><?php echo __('ID') ?></th>
+                <th style="width:100px;"><?php echo __('Tarih') ?></th>
+                <th style="width:100px;"><?php echo __('Banka') ?></th>
+                <th style="width:150px;"><?php echo __('Banka Order ID') ?></th>
+                <th style="width:40px;"	><?php echo __('Kredi Kartı No') ?></th>
+                <th style="width:40px;"	><?php echo __('Taksit') ?></th>
+                <th style="width:40px;"	><?php echo __('Oran') ?></th>
+                <th style="width:100px;"><?php echo __('Tutar') ?></th>
+                <th style="width:80px;"	><?php echo __('M.Ülke') ?></th>
+                <th style="width:80px;"	><?php echo __('IP.Ülke') ?></th>
+                <th style="width:40px;"	><?php echo __('MD') ?></th>
+                <th style="width:40px;"	><?php echo __('RC') ?></th>
+                <th style="width:100px;"><?php echo __('IP') ?></th>
+                <th style="width:100px;"><?php echo __('BL') ?></th>
+                <th style="width:100px;"><?php echo __('Detay') ?></th>
+            </tr>
+        </thead>
+        <?php 
+
+			if (count($_items) < 1) 
+			{
+				?>
+					<tbody style="background-color:lightyellow;">
+						<tr class="border">
+							<td colspan="14" style="padding-left:10px;">
+								<?php echo __('Bu siparişte hiç sanal pos işlemi yapılmamıştır.') ?>
+							</td>
+						</tr>
+					</tbody>
+				<?php
+			} // if sonu
+			else 
+			{
+				foreach ($_items as $_item)
+				{
+					$trans_id=intval($_item['trans_id']);
+
+					if ($_item['is_blocked_by_limit'] == "Y") 
+					{
+						$status_class="blocked";
+					} // if sonu
+					elseif(
+							($_item["banka_id"] == "ykb" and $_item['api_response_code'] == "1") 
+							or 
+							($_item['md_status'] < 5 and $_item['api_response_code'] == "00")
+							) 
+					{
+						$status_class="acquired";
+					} // else sonu
+					else 
+					{
+						$status_class="odd";
+					} // else sonu
+
+					$banka_bilgi=$turkpay->banka_liste(strtolower($_item['banka_id']));
+					
+					if ($_item["trans_type"] == "live") 
+					{
+						$panel_url=$banka_bilgi[0]["panel_url"];
+					} // if sonu
+					else 
+					{
+						$panel_url=$banka_bilgi[0]["test_panel_url"];
+					} // else sonu
+										
+					?>
+					<tbody class="<?php echo $status_class;?>">
+						<tr class="border">
+							<td width="30"><?php echo $trans_id ?></td>
+							<td width="100" nowrap><?php echo $_item['trans_date'] ?></td>
+							<td width="100"><?php echo $_item['banka_id'] ?> &nbsp;<a href="<?php echo $panel_url ?>" target="panel">[P]</a></td>
+							<td width="130"><?php echo $_item['banka_order_id'] ?></td>
+							<td width="130"><?php echo $_item['pan_masked'] ?></td>
+							<td width="40"><?php echo $_item['installment'] ?></td>
+							<td width="40"><?php echo $_item['commission'] ?></td>
+							<td width="50"><?php echo $_item['grand_total'] ?></td>
+							<td width="50"><?php echo $_item['pan_country_declared'] ?></td>
+							<td width="50"><?php echo $_item['pan_country_detected'] ?></td>
+							<td width="30"><?php echo $_item['md_status'] ?></td>
+							<td width="30"><?php echo $_item['api_response_code'] ?></td>
+							<td width="150"><?php echo $_item['customer_ip'] ?>&nbsp;<a href="http://www.whois.sc/<?php echo $_item['customer_ip'] ?>" target="whois">[Whois]</a>&nbsp;<a href="http://www.geoiptool.com/en/?IP=<?php echo $_item['customer_ip'] ?>" target="geo">[Geo]</a></td>
+							<td width="30"><?php echo $_item['is_blocked_by_limit'] ?></td>
+							<td width="60">
+								<div style="display:block;padding:0px;" id="detail_show_<?php echo $trans_id ?>"><?php echo __('Göster'); ?></div>
+								<div style="display:none;padding:0px;" id="detail_hide_<?php echo $trans_id ?>"><?php echo __('Gizle'); ?></div>
+								<script language="javascript">
+								<!--
+									jQuery(document).ready(function() {
+															jQuery("#detail_show_<?php echo $trans_id?>").click(
+																function (){
+																	jQuery("#detail_<?php echo $trans_id?>").show("fast");
+																	jQuery("#detail_show_<?php echo $trans_id?>").hide("fast");			
+																	jQuery("#detail_hide_<?php echo $trans_id?>").show("fast");			
+																}
+															);;
+															})
+									jQuery(document).ready(function() {
+															jQuery("#detail_hide_<?php echo $trans_id?>").click(
+																function (){
+																	jQuery("#detail_<?php echo $trans_id?>").hide("fast");
+																	jQuery("#detail_show_<?php echo $trans_id?>").show("fast");			
+																	jQuery("#detail_hide_<?php echo $trans_id?>").hide("fast");			
+																}
+															);;
+															})
+								//-->
+								</script>
+							</td>
+						</tr>
+					</tbody>
+					<tbody>
+						<tr class="border">
+							<td colspan="15" style="padding-left:20px;">
+								<div style="display:none;padding:0px;" id="detail_<?php echo $trans_id?>">
+									<style type="text/css">
+										.grinet_log_detail{
+												font-family:'courier new',fixedsys,'sans serif';
+												width:auto !important;
+											}
+									</style>
+									<p>
+									<h2><?php echo __('3D Secure Sent'); ?></h2>
+									<?php if (isset($_item['data_1_send'])) {echo highlight_string(str_replace("\'","'",$_item['data_1_send']),true);} ?>
+									<p>
+									<h2><?php echo __('3D Secure Response'); ?></h2>
+									<?php if (isset($_item['data_1_response'])) {echo highlight_string(str_replace("\'","'",$_item['data_1_response']),true);} ?>
+									<p>
+									<h2><?php echo __('Payment Sent'); ?></h2>
+									<?php if (isset($_item['data_2_send'])) {echo highlight_string(str_replace("\'","'",$_item['data_2_send']),true);} ?>
+									<p>
+									<h2><?php echo __('Payment Response'); ?></h2>
+									<?php if (isset($_item['data_2_response'])) {echo highlight_string(str_replace("\'","'",$_item['data_2_response']),true);} ?>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				<?php 
+				} 
+			} // else sonu
+		?>
+    </table>
+
+	<br><br>
+	<h3>Satır Renkleri : </h3>
+	<table>
+		<tbody class="acquired" width="300">
+			<tr>
+				<td width="70">Yeşil</td>
+				<td width="10">:</td>
+				<td>Başarılı İşlem</td>
+			</tr>
+		</tbody>
+		<tbody class="odd">
+			<tr>
+				<td>Beyaz</td>
+				<td>:</td>
+				<td>Başarısız İşlem</td>
+			</tr>
+		</tbody>
+		<tbody class="blocked">
+			<tr>
+				<td>Kırmızı</td>
+				<td>:</td>
+				<td>Müşteri Bloklandı</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<br><br>
+	<h3>Kısaltmalar : </h3>
+	<table>
+		<tr>
+			<td>Banka</td>
+			<td>:</td>
+			<td>İşlem Yapılan Banka</td>
+		</tr>
+		<tr>
+			<td>Banka Order Id</td>
+			<td>:</td>
+			<td>Bankanın Sanal Pos Panelinde göreceğiniz sipariş numarası</td>
+		</tr>
+		<tr>
+			<td>Tutar</td>
+			<td>:</td>
+			<td>Çekilmek üzere bankaya bildirilen miktar. Eğer satır yeşilse bu miktar çekildi demektir.</td>
+		</tr>
+		<tr>
+			<td>M.Ülke</td>
+			<td>:</td>
+			<td>Müşteri tarafından bildirilen ülke</td>
+		</tr>
+		<tr>
+			<td>IP Ülke</td>
+			<td>:</td>
+			<td>Sistem tarafından tespit edilen, müşterinin sipariş verirken bulunduğu ülke</td>
+		</tr>
+		<tr>
+			<td>MD</td>
+			<td>:</td>
+			<td>3D Secure sisteminden dönen onay kodudur. 
+				<br>1 = Tam onaylama, 2, 3 ve 4 ise 3D onayı alınmadan para Tutar modlardır. 
+				<br>5,6,7,8,9 ise 3D secure sisteminden onay alınamadığını gösterir.			
+				<br>2,3 veya 4 kod döndüğünde de karttan para çekilebilir. Ancak bu durumda özellikle yabancı bankalarda para iadesi, müşteri itirazı gibi sorunlar çıkabilmektedir. Bu kodlar kabul edilmediği durumda da 3D anlaşması olmayan ( özellikle yabancı ) bankaların müşterileri ödeme yapamamaktadırlar.
+			</td>
+		</tr>
+		<tr>
+			<td>RC</td>
+			<td>:</td>
+			<td>3D Secure onayından sonra bankadan yapılan tahsilatın geri dönüş kodudur. 
+			<br>00 : Para çekildi
+			<br>Diğer kodlar : Para çekilemedi
+			</td>
+		</tr>
+		<tr>
+			<td>IP Ülke</td>
+			<td>:</td>
+			<td>Sistem tarafından tespit edilen, müşterinin sipariş verirken bulunduğu ülke</td>
+		</tr>
+		<tr>
+			<td>BL</td>
+			<td>:</td>
+			<td>Müşterinin kredi kartı deneme limiti nedeniyle bloklanma durumudur.
+				<br>Y:Bloklandı
+				<br>N:Bloklanmadı
+			</td>
+		</tr>
+	</table>
+  </div>
+</div>
+
+<?php
+/*
+
+trans_id              
+trans_date            
+customer_id           
+guest_id              
+order_id              
+quote_id              
+banka_order_id        
+banka_id              
+banka_3d_type         
+installment           
+commission            
+commission_total      
+sub_total             
+grand_total           
+random_hash           
+pan_masked            
+pan_owner             
+pan_bank              
+pan_country_detected  
+pan_country_declared  
+pan_type              
+data_1_send           
+data_1_response       
+data_2_send           
+data_2_response       
+md_status             
+md_message            
+transaction_id        
+api_response_code     
+api_response_message  
+host_message          
+cc_syntax_ok          
+cc_verify_ok          
+customer_ip           
+customer_hostname     
+is_blocked_by_limit   
+*/
+?>

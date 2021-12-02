@@ -1,0 +1,380 @@
+<config>
+	<tabs>
+		<moka-tabs translate="label comment" module="moka">
+			<label>Moka Ödeme</label>
+			<sort_order>0</sort_order>
+		</moka-tabs>
+	</tabs>
+	
+	<sections>
+
+		<moka translate="label comment" module="moka">
+			<label>Moka Ayarları</label>
+			<tab>moka-tabs</tab>
+			<frontend_type>text</frontend_type>
+			<sort_order>1100</sort_order>
+			<show_in_default>1</show_in_default>
+			<show_in_website>1</show_in_website>
+			<show_in_store>1</show_in_store>
+			<show_in_storeview>1</show_in_storeview>
+			<groups>
+				<settings translate="label comment">
+					<label>Genel Ayarlar</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>1</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<show_in_storeview>1</show_in_storeview>
+					<fields>
+						<api_test_mode translate="label comment">
+                            <label>Test Modu Açık Mı?</label>
+                            <comment>Entegrasyon testleri için test modunu açabilirsiniz. Bu durumda ödemeleriniz test sistemi üzerinden yapılacaktır. Test ödemeleri için Moka tarafından sağlanan test kartlarını kullanmalısınız.</comment>
+                            <frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>9</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+							<show_in_storeview>1</show_in_storeview>
+                        </api_test_mode>
+						<dealer_code translate="label comment">
+							<label>İşyeri Kodu</label>
+                            <comment>Bu bilgiyi Moka tarafından size verilen kontrol panelinde Hesap Yönetimi / Hesap Ayarları bölümünde bulabilirsiniz</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</dealer_code>
+						<dealer_user translate="label comment">
+							<label>İşyeri Kullanıcı Adı</label>
+                            <comment>Bu bilgiyi Moka tarafından size verilen kontrol panelinde Hesap Yönetimi / Hesap Ayarları bölümünde bulabilirsiniz</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>20</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</dealer_user>
+						<dealer_password translate="label comment">
+							<label>İşyeri Kullanıcı Şifresi</label>
+                            <comment>Bu bilgiyi Moka tarafından size verilen kontrol panelinde Hesap Yönetimi / Hesap Ayarları bölümünde bulabilirsiniz</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>25</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</dealer_password>
+						<mode3d translate="label comment">
+							<label>3D Mağaza Tipi</label>
+							<frontend_type>select</frontend_type>
+							<source_model>moka_payment_model_Options_Moka3dtypes</source_model>
+							<sort_order>170</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</mode3d>
+                        <front_desc translate="label comment">
+                            <label>Ön sayfada yer almasını istediğiniz ek açıklama</label>
+                            <comment>Sipariş tamamlarken ödeme aşamasında moka.com Ödeme yönteminin hemen altında çıkmasını istediğiniz açıklamayı veya HTML içeriği buraya giriniz</comment>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+							<show_in_storeview>1</show_in_storeview>
+                        </front_desc>
+                        <order_status_after_payment translate="label comment">
+                            <label>Başarılı Ödemeden Sonra Siparişin Durumu</label>
+                            <comment></comment>
+                            <frontend_type>select</frontend_type>
+							<source_model>Moka_Payment_Model_Options_StatusesSuccess</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+							<show_in_storeview>1</show_in_storeview>
+                        </order_status_after_payment>
+						<notify_mail translate="label comment">
+							<label>Bildirim icin Mail Adresi</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>50</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<show_in_storeview>1</show_in_storeview>
+						</notify_mail>
+						<order_prefix translate="label comment">
+							<label>Sipariş Numarası Öneki</label>
+							<comment>Birden çok siteyi tek sanal postan çalıştırırken, sipariş numaralarının ayıklanabilmesi için kullanacağınız kısa ön ek. Sadece harf ve rakam içerebilir, türkçe karakter (Ç,Ğ,İ,Ş,Ö,Ü) içeremez, 8 karakterden fazla olmamalıdır. Örnek : AYAKKABI, KITAPSIT gibi </comment>
+							<frontend_type>text</frontend_type>
+							<size>8</size>
+							<sort_order>60</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</order_prefix>
+						<use_custom_order_statuses translate="label comment">
+                            <label>Özel Sipariş Durumlarını Kullan</label>
+                            <comment>Kredi kartı ile yapılan siparişlerin diğer ödeme yöntemlerinden ayrışması ve özellikle ödemesi yapılamayan siparişlerin Havale gibi "Ödeme Bekleniyor" durumunu kullanan yöntemlerle karışmaması için modülümüz tarafından özel olarak oluşturulan ve "Moka" ile başlayan sipariş durumları kullanılır.</comment>
+                            <frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+							<show_in_storeview>1</show_in_storeview>
+                        </use_custom_order_statuses>
+						<currency translate="label comment">
+                            <label>Tahsilat için Para Birimi</label>
+                            <comment></comment>
+                            <frontend_type>select</frontend_type>
+							<source_model>Moka_Payment_Model_Options_MokaCurrencies</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+							<show_in_storeview>1</show_in_storeview>
+                        </currency>
+						<curl_cipher_mode translate="label comment">
+							<label>Curl SSL bağlantı hatası için cipher düzeltmesi</label>
+							<frontend_type>select</frontend_type>
+							<comment>Bazı sunuculardan bankalara bağlanırken sunucular arası SSL sorunu nedeniyle karşıdan cevap alamadığınız durumda bu özelliği değiştirerek deneyiniz</comment>
+							<source_model>Moka_Payment_Model_Options_SslCipherModes</source_model>
+							<sort_order>220</sort_order>
+							<show_in_default>1</show_in_default>
+						</curl_cipher_mode>
+					</fields>
+				</settings>
+				<taksitler translate="comment">
+					<label>Taksit Ayarları</label>
+					<frontend_type>text</frontend_type>
+					<comment>
+						<![CDATA[ 
+						Taksit alanında ondalıklı rakamları ayırmak için nokta kullanınız. <br>
+						Boş bıraktığınız taksitler ön sayfada gösterilmez. <br>
+						Taksitte vade farkı olarak indirim yapılacaksa negatif değer kullanınız ( Örnek : %5.5 indirim için -5.5 gibi ). <br>
+						Vade farkı değeri olarak 0 verirseniz "<B>peşin fiyatına taksit</B>" olarak işaretlenir.<br>
+						<br>
+						<br>
+						<br>
+						]]>
+					</comment>
+					<sort_order>2</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<show_in_storeview>1</show_in_storeview>
+					<fields>
+						<taksit translate="label comment">
+							<label>Taksitlendirme Aktif mi ?</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>1</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</taksit>
+						<taksit_yerlesimi translate="label comment">
+							<label>Kredi kartı ekranında taksitler alta kaydırılsın mı ?</label>
+							<frontend_type>select</frontend_type>
+							<comment>Onestepckheckout benzeri modüllerde kredi kartı ve ekranı yanyana sığmaz. Bu nedenle bu seçeneğe evet derseniz taksit kutusu kredi kartı bilgilerinin sağında değil altında çıkar.</comment>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>300</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</taksit_yerlesimi>
+						<taksit_0 translate="label comment"><label>Tek Çekim</label><frontend_type>text</frontend_type><sort_order>1000</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_0>
+						<taksit_2 translate="label comment"><label>2 Taksit</label><frontend_type>text</frontend_type><sort_order>1002</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_2>
+						<taksit_3 translate="label comment"><label>3 Taksit</label><frontend_type>text</frontend_type><sort_order>1003</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_3>
+						<taksit_4 translate="label comment"><label>4 Taksit</label><frontend_type>text</frontend_type><sort_order>1004</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_4>
+						<taksit_5 translate="label comment"><label>5 Taksit</label><frontend_type>text</frontend_type><sort_order>1005</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_5>
+						<taksit_6 translate="label comment"><label>6 Taksit</label><frontend_type>text</frontend_type><sort_order>1006</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_6>
+						<taksit_7 translate="label comment"><label>7 Taksit</label><frontend_type>text</frontend_type><sort_order>1007</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_7>
+						<taksit_8 translate="label comment"><label>8 Taksit</label><frontend_type>text</frontend_type><sort_order>1008</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_8>
+						<taksit_9 translate="label comment"><label>9 Taksit</label><frontend_type>text</frontend_type><sort_order>1009</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_9>
+						<taksit_10 translate="label comment"><label>10 Taksit</label><frontend_type>text</frontend_type><sort_order>1010</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_10>
+						<taksit_11 translate="label comment"><label>11 Taksit</label><frontend_type>text</frontend_type><sort_order>1011</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_11>
+						<taksit_12 translate="label comment"><label>12 Taksit</label><frontend_type>text</frontend_type><sort_order>1012</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_12>
+					</fields>
+				</taksitler>
+				<taksit_baslik translate="comment">
+					<label>Taksit Başlıkları</label>
+					<frontend_type>text</frontend_type>
+					<comment>
+						<![CDATA[ 
+						Bu kısımdaki alanlar, bankaların 2 + 8 taksit gibi kampanyalarında 2 taksit alanına özel bir isim verebilmeniz için eklenmiştir.<br>
+						Buradaki alanlara bir değer girmezseniz müşteri tarafında 2 Taksit gibi standart bir ifade çıkar.<br>
+						<br>
+						<br>
+						<br>
+						]]>
+					</comment>
+					<sort_order>3</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<show_in_storeview>1</show_in_storeview>
+					<fields>
+						<taksit_0 translate="label comment"><label>Tek Çekim Yazı</label>	<frontend_type>text</frontend_type><sort_order>11000</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_0>
+						<taksit_2 translate="label comment"><label>2 Taksit Yazı</label>	<frontend_type>text</frontend_type><sort_order>11020</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_2>
+						<taksit_3 translate="label comment"><label>3 Taksit Yazı</label>	<frontend_type>text</frontend_type><sort_order>11030</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_3>
+						<taksit_4 translate="label comment"><label>4 Taksit Yazı</label>	<frontend_type>text</frontend_type><sort_order>11040</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_4>
+						<taksit_5 translate="label comment"><label>5 Taksit Yazı</label>	<frontend_type>text</frontend_type><sort_order>11050</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_5>
+						<taksit_6 translate="label comment"><label>6 Taksit Yazı</label>	<frontend_type>text</frontend_type><sort_order>11060</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_6>
+						<taksit_7 translate="label comment"><label>7 Taksit Yazı</label>	<frontend_type>text</frontend_type><sort_order>11070</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_7>
+						<taksit_8 translate="label comment"><label>8 Taksit Yazı</label>	<frontend_type>text</frontend_type><sort_order>11080</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_8>
+						<taksit_9 translate="label comment"><label>9 Taksit Yazı</label>	<frontend_type>text</frontend_type><sort_order>11090</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_9>
+						<taksit_10 translate="label comment"><label>10 Taksit Yazı</label>	<frontend_type>text</frontend_type><sort_order>11100</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_10>
+						<taksit_11 translate="label comment"><label>11 Taksit Yazı</label>	<frontend_type>text</frontend_type><sort_order>11110</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_11>
+						<taksit_12 translate="label comment"><label>12 Taksit Yazı</label>	<frontend_type>text</frontend_type><sort_order>11120</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></taksit_12>
+					</fields>
+				</taksit_baslik>
+			</groups>
+		</moka>
+
+		<payment>
+			<groups>
+				<moka_payment translate="label comment" module="moka">
+					<label>Moka Payment Taksitli Ödeme Sistemi</label>
+					<comment>
+						<![CDATA[ 
+						<table>
+							<tr>
+								<td>
+									<A HREF="http://www.grinet.com.tr" style="text-decoration:none;float:left;"><IMG SRC="http://www.grinet.com.tr/logo/grinet_logo_export.png" ALT="GriNet Internet Hizmetleri - grinet.com.tr"></A>
+								</td>
+								<td style="padding:5px;padding-left:30px;">
+									<A HREF="http://www.moka.com" target="moka" style="text-decoration:none;float:left;"><IMG SRC="http://www.grinet.com.tr/logo/logo_moka.png" ALT="moka.com"></A>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<H2>GriNet <a href="http://www.moka.com" target="moka">moka.com</a> Taksitli Ödeme Sistemi</H2>
+									Bilgi ve Destek için <A HREF="http://www.grinet.com.tr" style="text-decoration:none;" target="grinet">http://www.grinet.com.tr</A> ve <A HREF="http://www.moka.com" style="text-decoration:none;" target="moka.com">http://www.moka.com</A>
+								</td>
+							</tr>
+						</table>
+						<br>
+						<br>
+						]]>
+					</comment>
+					<sort_order>671</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<active translate="label comment">
+							<label>Aktif Mi?</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>100</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</active>
+						<title translate="label comment">
+							<label>Ödeme Ekranında Gösterilecek İsim</label>
+                            <comment>Alışveriş tamamlama aşamasında ödeme ekranında gösterilecek olan ödeme yöntemi ismidir.</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>300</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</title>
+						<order_status_before_payment translate="label comment">
+                            <label>Ödemeye Geçmeden Önce Siparişin Durumu</label>
+                            <comment>Sipariş ilk oluşturulduğunda siparişin durumu bu değere ayarlanır.</comment>
+                            <frontend_type>select</frontend_type>
+							<source_model>Moka_Payment_Model_Options_StatusesNew</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+							<show_in_storeview>1</show_in_storeview>
+                        </order_status_before_payment>
+						<order_status_after_payment_fail translate="label comment">
+                            <label>Başarısız Ödemede Siparişin Durumu</label>
+                            <comment>Ödeme tahsil edilirken hata oluşursa ve ödeme tamamlanamazsa mevcut sipariş bu duruma getirilir.</comment>
+                            <frontend_type>select</frontend_type>
+							<source_model>Moka_Payment_Model_Options_StatusesFail</source_model>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+							<show_in_storeview>1</show_in_storeview>
+                        </order_status_after_payment_fail>
+						<redirect_after_fail translate="label comment">
+							<label>Hatalı işlemlerden sonra müşteri nereye yönlendirilsin ?</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>600</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<show_in_storeview>1</show_in_storeview>
+						</redirect_after_fail>
+						<wait_html translate="label comment">
+							<label>Lütfen Bekleyiniz mesajı</label>
+							<comment>Tahsilat yapılırken müşterinin sayfayı kapatmaması veya işlem yapmaması için gösterilen uyarı. Bu alana HTML olarak içerik girmeniz tavsiye edilir. Eğer bu alanı boş bırakırsanız ekrana standart bekleme mesajı basılacaktır.</comment>
+							<frontend_type>textarea</frontend_type>
+							<size>60000</size>
+							<sort_order>700</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<show_in_storeview>1</show_in_storeview>
+						</wait_html>
+                        <sort_order translate="label comment">
+                            <label>Sort Order</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sort_order>
+                        <cctypes translate="label">
+                            <label>Credit Card Types</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>adminhtml/system_config_source_payment_cctype</source_model>
+                            <sort_order>900</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </cctypes>
+						<allowspecific translate="label comment">
+                            <label>Sadece seçili ülkelerden tahsilat yap</label>
+                            <frontend_type>allowspecific</frontend_type>
+                            <sort_order>1000</sort_order>
+                            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </allowspecific>
+                        <specificcountry translate="label comment">
+                            <label>Tahsilat yapılabilecek ülkeler</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>1100</sort_order>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </specificcountry>						
+						<customer_ip_to_country translate="label comment">
+							<label>Müşteri IP Adreslerinin ülkeleri tespit edilsin mi ?</label>
+							<frontend_type>select</frontend_type>
+							<comment>Tahsilat yapılırken müşterinin IP adresinin ülkesi tespit edilir. Genelde milisaniyeler kadar kısa zamanda yapılan bu işlem, yoğun zamanlarda 1-2 saniye civarında sürebilir.</comment>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>1200</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</customer_ip_to_country>
+					</fields>
+				</moka_payment>
+			</groups>
+		</payment>
+	</sections>
+</config>

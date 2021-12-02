@@ -1,0 +1,42 @@
+<?php
+/**
+
+	Uretici..........: Moka 
+	Yazılımın Adı....: Moka_Payment // moka.com için Magento Tahsilat Modülü
+	Geliştiren.......: Hidayet Ok <hidayet@grinet.com.tr>
+	Web..............: https://www.moka.com/
+
+	/// Yasal Uyarı /////////////////////////////////////////////////////////////////////////
+
+	Tüm hakları MOKA ÖDEME KURULUŞU A.Ş.'ne aittir.
+
+*/
+?><?php
+
+	$banka=ucfirst(Mage::getSingleton('checkout/session')->getData('banka'));
+
+	if ($banka == "Tekcekim") 
+	{
+		$banka = Mage::getStoreConfig('tekcekim/settings/tekcekim_banka');
+	} // if sonu
+	
+	if ($banka != "") 
+	{
+		echo "<H2>".__("Bankanızın sistemine yönlendiriliyorsunuz...")."</H2>";
+		$model_adi	= "Grinet_moka_Model_Banka_".$banka;
+		$banka	= Mage::getModel($model_adi);
+		$banka->gonder();
+		echo "<br><br><br><br><br><br><br><br><br><br><br><br><br>";
+	} // if sonu
+	else 
+	{
+		echo "<H2>".__("Ana Sayfaya Yönlendiriliyorsunuz...")."</H2>";
+		echo "<br><br><br><br><br><br><br><br><br><br><br><br><br>";
+		?>
+			<script language="javascript">
+				window.location.replace("<?php echo $this->getUrl('/',array('_secure' => true));?>");
+			</script>
+		<?php
+		
+	} // else sonu
+		

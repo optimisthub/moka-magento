@@ -1,0 +1,272 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Moka_Payment>
+			<version>0.1.4</version>
+		</Moka_Payment>
+	</modules>
+	<!-- /////////////////////////////////////////////////////////// -->
+	<global>
+        <resources>
+			<moka_payment_setup>
+				<setup>
+					<module>Moka_Payment</module>
+					<class>Moka_Payment_Model_Resource_Eav_Mysql4_Setup</class>
+				</setup>
+				<connection>
+					<use>core_setup</use>
+				</connection>
+			</moka_payment_setup>
+			<moka_payment_write>
+				<connection>
+					<use>core_write</use>
+				</connection>
+			</moka_payment_write>
+			<moka_payment_read>
+				<connection>
+					<use>core_read</use>
+				</connection>
+			</moka_payment_read>
+		</resources>
+        <blocks>
+			<adminhtml>
+				<rewrite>
+					<!-- <sales_order_grid>Moka_Payment_Block_Adminhtml_Sales_Order_Grid</sales_order_grid> -->
+				</rewrite>
+			</adminhtml>
+            <moka><class>Moka_Payment_Block</class></moka>
+            <moka_payement><class>Moka_Payment_Block</class></moka_payement>
+        </blocks>
+		<helpers>
+			<moka><class>Moka_Payment_Helper</class></moka>
+		</helpers>
+
+		<!-- 
+		<models>
+			<sales>
+				<rewrite>
+					<quote_item>Moka_Payment_Model_Quote_Item_Abstract</quote_item>
+					<quote_payment>Moka_Payment_Model_Quote_Payment</quote_payment>
+					<quote>Moka_Payment_Model_Quote</quote>
+				</rewrite>
+			</sales> 
+			<checkout>
+				<rewrite>
+					<cart>Moka_Payment_Model_Checkout_Cart</cart>
+				</rewrite>
+			</checkout> 
+			<moka_mysql4>
+                <class>Moka_Payment_Model_Mysql4</class>
+            </moka_mysql4>
+			<moka>
+                <class>Moka_Payment_Model</class>
+            </moka>
+			<lib>
+				<moka>
+					<class>Moka_Payment_Model_Lib_Moka</class>
+				</moka>
+			</lib>
+		</models>
+		-->
+
+		<models>
+			<moka>
+                <class>Moka_Payment_Model</class>
+                <resourceModel>moka_mysql4</resourceModel>
+            </moka>
+			<moka_mysql4>
+                <class>Moka_Payment_Model_Mysql4</class>
+                <entities>
+                    <logs>
+                        <table>moka_payment_info</table>
+                    </logs>
+                    <directpayments>
+                        <table>moka_payment_direct_payments</table>
+                    </directpayments>
+                </entities>
+            </moka_mysql4>
+			<sales>
+				<rewrite>
+					<quote_item>Moka_Payment_Model_Quote_Item_Abstract</quote_item>
+					<quote_payment>Moka_Payment_Model_Quote_Payment</quote_payment>
+					<quote>Moka_Payment_Model_Quote</quote>
+				</rewrite>
+			</sales> 
+			<checkout>
+				<rewrite>
+					<cart>Moka_Payment_Model_Checkout_Cart</cart>
+				</rewrite>
+			</checkout> 
+			<moka>
+                <class>Moka_Payment_Model</class>
+            </moka>
+		</models>
+
+
+	</global>
+	<!-- /////////////////////////////////////////////////////////// -->
+    <admin>
+        <routers>
+			<adminhtml>
+				<args>
+					<modules>
+						<moka_islemler before="Mage_Adminhtml">Moka_Payment_Adminhtml</moka_islemler>
+					</modules>
+				</args>
+			</adminhtml>
+        </routers>
+    </admin>
+    
+	<frontend>       
+
+		<translate>
+            <modules>
+                <Moka_Payment>
+                    <files>
+                        <default>Moka_Payment.csv</default>
+                    </files>
+                </Moka_Payment>
+            </modules>
+        </translate>        
+	
+		<routers>
+			<grmoka>
+				<use>standard</use>
+				<args>
+					<module>Moka_Payment</module>
+					<frontName>grmoka</frontName>
+				</args>
+			</grmoka>
+		</routers>
+        
+		<layout>
+            <updates>
+                <moka_payment>
+                    <file>moka_payment.xml</file>
+                </moka_payment>
+            </updates>
+        </layout>
+
+	</frontend>
+	<!-- /////////////////////////////////////////////////////////// -->
+    
+   <default>
+		<moka>
+			<groups>
+				<settings>
+					<dealer_code></dealer_code>	
+					<dealer_user></dealer_user>
+					<dealer_password></dealer_password>
+					<curl_cipher_mode>none</curl_cipher_mode>
+					<error_mail_language>TR</error_mail_language>
+					<currency>TRY</currency>
+					<use_custom_order_statuses>0</use_custom_order_statuses>
+					<siparisi_tek_satir_gonder>0</siparisi_tek_satir_gonder>
+					<order_prefix></order_prefix>
+					<notify_mail></notify_mail>
+					<order_status_after_payment>processing</order_status_after_payment>
+					<front_desc></front_desc>
+					<secret_key></secret_key>
+				</settings>
+				<taksitler>
+					<taksit>0</taksit>
+					<taksit_yerlesimi>0</taksit_yerlesimi>
+					<taksit_0></taksit_0>
+					<taksit_2></taksit_2>
+					<taksit_3></taksit_3>
+					<taksit_4></taksit_4>
+					<taksit_5></taksit_5>
+					<taksit_6></taksit_6>
+					<taksit_7></taksit_7>
+					<taksit_8></taksit_8>
+					<taksit_9></taksit_9>
+					<taksit_10></taksit_10>
+					<taksit_11></taksit_11>
+					<taksit_12></taksit_12>
+				</taksitler>
+				<taksit_baslik>
+					<taksit_0></taksit_0>
+					<taksit_2></taksit_2>
+					<taksit_3></taksit_3>
+					<taksit_4></taksit_4>
+					<taksit_5></taksit_5>
+					<taksit_6></taksit_6>
+					<taksit_7></taksit_7>
+					<taksit_8></taksit_8>
+					<taksit_9></taksit_9>
+					<taksit_10></taksit_10>
+					<taksit_11></taksit_11>
+					<taksit_12></taksit_12>
+				</taksit_baslik>
+			</groups>
+		</moka>
+		<payment>
+            <moka_payment>
+					<active>1</active>
+					<admin_remote_ip>0</admin_remote_ip>
+					<allowspecific>0</allowspecific>
+					<ccform_template>cc_form.phtml</ccform_template>
+					<cctypes>VI,MC</cctypes>
+					<customer_ip_to_country>0</customer_ip_to_country>
+					<model>Moka_Payment_Model_Moka</model>
+					<order_status>pending</order_status>
+					<order_status_after_payment>processing</order_status_after_payment>
+					<order_status_after_payment_fail>canceled</order_status_after_payment_fail>
+					<order_status_before_payment>pending_payment</order_status_before_payment>
+					<payment_action>authorize</payment_action>
+					<redirect_after_fail>checkout/cart</redirect_after_fail>
+					<sort_order>100</sort_order>
+					<status_after_auto_invoice>processing</status_after_auto_invoice>
+					<test_card_info>1</test_card_info>
+					<title>Kredi Kartý Ödemesi - Moka</title>
+					<wait_html><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="tr" lang="tr">
+					<head>
+						<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+						<title>Ödeme iþlemi devam ediyor...</title>
+					</head>
+					<body>
+					<h3 style='font-family:verdana;'>Kartinizdan tahsilat yapilirken lutfen bekleyiniz...</h3>
+					<h4 style='font-family:verdana;'>Islem yapilirken bu pencereyi kapatmayiniz veya herhangi bir tusa basmayiniz, sayfayi yenilemeyiniz.</h4>
+					</body>
+					</html>
+					]]></wait_html>
+			</moka_payment>
+         </payment>
+    </default> 
+    
+	<!-- /////////////////////////////////////////////////////////// -->
+    
+    <adminhtml>
+		<layout>
+            <updates>
+                <moka>
+                    <file>moka_payment_admin.xml</file>
+                </moka>
+            </updates>
+        </layout>
+		<acl>
+			<resources>
+				<all>
+					<title>Allow Everything</title>
+				</all>
+				<admin>
+					<children>
+						<system>
+							<children>
+								<config>
+									<children>
+										<moka translate="title">
+											<title>Moka Payment Ayarlarý</title>
+											<sort_order>10000</sort_order>
+										</moka>
+									</children>
+								</config>
+							</children>
+						</system>
+					</children>
+				</admin>
+			</resources>
+		</acl>
+    </adminhtml>
+</config> 

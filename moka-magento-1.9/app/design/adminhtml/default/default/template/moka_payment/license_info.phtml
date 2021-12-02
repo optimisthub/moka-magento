@@ -1,0 +1,45 @@
+<?php
+/**
+
+	Uretici..........: Moka 
+	Yazılımın Adı....: Moka_Payment // moka.com için Magento Tahsilat Modülü
+	Geliştiren.......: Hidayet Ok <hidayet@grinet.com.tr>
+	Web..............: https://www.moka.com/
+
+	/// Yasal Uyarı /////////////////////////////////////////////////////////////////////////
+
+	Tüm hakları MOKA ÖDEME KURULUŞU A.Ş.'ne aittir.
+
+*/
+?>
+<?php 
+
+	$turkpay = Mage::getModel('Grinet_moka_Model_Grinet');
+	$arr=$turkpay->licensed_domains();
+	
+?>
+<style type="text/css">
+	.license_box{
+			border:lightgrey 1px solid;
+			background:#F0F0F0;
+			color:gray;
+			padding:15px;
+		}
+
+	.license_box h3{
+			color:orange;
+		}
+	.license_box h4{
+			font-family:'courier new';
+			font-size:12px;
+			color:gray;
+			font-weight:normal;
+		}
+</style>
+<div class="license_box">
+    <h3><?php echo __('Lisans Bilgisi:')?></h3>
+    <h4><?php echo __('Domainler : ').join(", ",$arr["domains"]);?></h4>
+    <h4><?php echo __('IP Adresleri : ').join(", ",$arr["ips"]);?></h4>
+    <h4><?php echo __('Geçerli Tarih : ').$arr["date"];?></h4>
+</div>
+<p>

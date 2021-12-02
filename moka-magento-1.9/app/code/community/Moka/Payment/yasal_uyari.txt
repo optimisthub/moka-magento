@@ -1,0 +1,13 @@
+
+	Uretici..........: Moka 
+	Yazýlýmýn Adý....: GriNet_Moka // moka.com için Magento Tahsilat Modülü
+	Geliþtirenler....: Hidayet Ok <hidayet@grinet.com.tr>
+	Web..............: https://www.moka.com/
+
+	/// Yasal Uyarý /////////////////////////////////////////////////////////////////////////
+
+	Grinet Moka ücretli daðýtýlan bir yazýlýmdýr. 
+
+	Tüm haklarý MOKA ÖDEME KURULUÞU A.Þ.'ne aittir.
+
+

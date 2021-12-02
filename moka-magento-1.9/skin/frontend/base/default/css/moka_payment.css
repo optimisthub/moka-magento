@@ -1,0 +1,92 @@
+/* GriNet Payment  */
+
+.taksit_container{
+				position:relative;
+				border:red 1px dotted;
+				width:300px;
+				}
+
+.taksit_satir0{
+				background:#D2FFCC;
+				border-bottom:gray 5px solid;
+				padding-bottom:5px;
+				}
+
+.taksit_satir1{
+				background:#F5F5F5;
+				}
+
+.taksit_satir2{
+				background:#E5E5E5;
+				}
+
+.taksit_head td, 
+.taksit_satir0 td, 
+.taksit_satir1 td, 
+.taksit_satir2 td 
+				{
+					font-family:verdana,tahoma,helvetica,times,arial;
+					font-size:11px;
+				}
+
+.taksit_head td{
+				background:#FFFFDD;
+				font-weight:normal;
+				padding:5px;
+				}
+
+tr.taksit_head_2 td
+				{
+					font-family:verdana,tahoma,helvetica,times,arial;
+					font-size:11px;
+					color:gray;
+					background:white;
+				}
+
+.taksit_table tr td {
+				padding:5px;
+				}
+
+.taksit_c1		{
+				padding:5px;
+				}
+
+.taksit_c2, .taksit_c3 {
+				text-align:right;
+				padding:5px;
+				}
+
+.banka_satir1{
+				background:#FFFFCC;
+				}
+
+.banka_satir2{
+				background:#FFEEDD;
+				}
+
+.banka_head td, .banka_satir1 td, .banka_satir2 td {
+				font-family:verdana,tahoma,helvetica,times,arial;
+				font-size:13px;
+				}
+
+.prod_taksit_container {
+				float:left;
+				padding:5px;
+				width:250px;
+				}
+
+.taksit_container_tekcekim {
+				float:left;
+				padding:5px;
+				width:auto;
+				background:#bbc4fd;
+				}
+
+div.taksit_container table tbody tr.taksit_head_banka td{background:white;padding-left:10px;}
+
+table#payment_form_grinet_turkpay tbody tr td div.input-box div label,
+table#payment_form_grinet_turkpay tbody tr td div.input-box label,
+table#payment_form_grinet_turkpay tbody tr td ul li div.input-box label
+{
+	width:100%;
+}

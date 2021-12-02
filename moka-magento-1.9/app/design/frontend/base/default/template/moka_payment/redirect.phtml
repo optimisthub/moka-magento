@@ -1,0 +1,19 @@
+<?php
+/**
+
+	Uretici..........: Moka 
+	Yazılımın Adı....: Moka_Payment // moka.com için Magento Tahsilat Modülü
+	Geliştiren.......: Hidayet Ok <hidayet@grinet.com.tr>
+	Web..............: https://www.moka.com/
+
+	/// Yasal Uyarı /////////////////////////////////////////////////////////////////////////
+
+	Tüm hakları MOKA ÖDEME KURULUŞU A.Ş.'ne aittir.
+
+*/
+?><?php
+
+	echo '<img src="'.$this->getSkinUrl('images/moka_payment/loading2.gif').'" border="0" hspace="10" vspace="10" align="left" alt="'.__('Lütfen bekleyiniz...').'"><br><br>';
+	echo "<h2>".__("Ödemenizi tamamlamak için moka.com Sitesine yönlendiriliyorsunuz...")."</h2>";
+	Mage::getModel("Moka_Payment_Model_Lib_Moka")->gonder();
+	echo "<br><br><br><br><br><br><br><br><br><br><br><br><br>";

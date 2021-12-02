@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+		<moka translate="title">
+			<title>Moka</title>
+			<sort_order>5000</sort_order>
+			<children>
+				<payment-settings translate="title">
+					<title>Ödeme Yöntemleri Ayarları</title>
+					<action>adminhtml/system_config/edit/section/payment</action>
+					<sort_order>10</sort_order>
+				</payment-settings>
+				<moka-settings translate="title">
+					<title>Moka Ayarları</title>
+					<action>adminhtml/system_config/edit/section/moka/</action>
+					<sort_order>200</sort_order>
+				</moka-settings>
+			</children>
+		</moka> 
+    </menu>
+   <default>	
+		<payment>
+            <moka_payment>
+					<active>1</active>
+					<model>Moka_Payment_Model_Moka</model>
+					<order_status>pending</order_status>
+					<title>Kredi Kartı ile Öde</title>
+					<cctypes>VI,MC</cctypes>
+					<payment_action>authorize</payment_action>
+					<order_status_after_payment>pending</order_status_after_payment>
+					<ccform_template>cc_form.phtml</ccform_template>
+					<redirect_after_fail>checkout/cart</redirect_after_fail>
+					<wait_notice><![CDATA[ 
+					{{LOGO}}
+					<h3 style='font-family:verdana;'>Kartinizdan tahsilat yapilirken lutfen bekleyiniz...</h3>
+					<h4 style='font-family:verdana;'>Islem yapilirken bu pencereyi kapatmayiniz veya herhangi bir tusa basmayiniz, sayfayi yenilemeyiniz.</h4>
+					]]></wait_notice>
+					<sadece_urunlere_vade_farki_ekle>1</sadece_urunlere_vade_farki_ekle>
+					<sort_order>100</sort_order>
+					<allowspecific>0</allowspecific>
+					<directpay_toplink>0</directpay_toplink>
+					<directpay_customerlink>0</directpay_customerlink>
+			</moka_payment>
+         </payment>
+    </default> 
+	
+	<adminhtml>
+		<layout>
+            <updates>
+                <moka>
+                    <file>moka_payment_admin.xml</file>
+                </moka>
+            </updates>
+        </layout>
+		<acl>
+			<resources>
+				<all>
+					<title>Allow Everything</title>
+				</all>
+				<admin>
+					<children>
+						<system>
+							<children>
+								<config>
+									<children>
+										<moka translate="title">
+											<title>Moka Payment Ayarları</title>
+											<sort_order>10000</sort_order>
+										</moka>
+									</children>
+								</config>
+							</children>
+						</system>
+					</children>
+				</admin>
+			</resources>
+		</acl>
+    </adminhtml>
+</config> 

@@ -1,0 +1,47 @@
+<?php
+/**
+
+	Uretici..........: Moka 
+	Yazılımın Adı....: Moka_Payment // moka.com için Magento Tahsilat Modülü
+	Geliştiren.......: Hidayet Ok <hidayet@grinet.com.tr>
+	Web..............: https://www.moka.com/
+
+	/// Yasal Uyarı /////////////////////////////////////////////////////////////////////////
+
+	Tüm hakları MOKA ÖDEME KURULUŞU A.Ş.'ne aittir.
+
+*/
+
+$info=$this->getInfo();
+
+$cc_arr=array(
+				"VI" => "Visa",
+				"MC" => "MasterCard",
+				"AM" => "American Express",
+			);
+
+?>
+<?php if($_info = $this->getInfo()): ?>
+<?php echo $this->__('Name on the Card: %s', "<strong>".$this->htmlEscape(ucwords($info->getData('cc_owner')))."</strong>") ?><br />
+<?php echo $this->__('Credit Card Type: %s', "<strong>".$this->htmlEscape(@$cc_arr[@$info->getData('cc_type')])."</strong>") ?><br />
+<?php echo $this->__('Credit Card Number: xxxx-%s', "<strong>".$this->htmlEscape($this->getInfo()->getCcLast4())."</strong>") ?><br />
+<?php echo $this->__('Expiration Date: %s/%s', "<strong>".$this->htmlEscape($info->getData('cc_exp_month'))."</strong>", "<strong>".$this->htmlEscape($info->getData('cc_exp_year')))."</strong>"; ?><br>
+<?php 
+	if (@$info->getData('moka_taksit')) 
+	{
+		if (@$info->getData('moka_taksit_adi')) 
+		{
+			echo $this->__('Taksit : <b>%s</b><br>',$this->htmlEscape($info->getData('moka_taksit_adi')))."<br>";
+		} // if sonu
+		else 
+		{
+			echo $this->__('Taksit : <b>%s</b><br>',$this->htmlEscape($info->getData('moka_taksit')))."<br>";
+		} // else sonu
+	} // if sonu
+
+?>
+<?php else: ?>
+
+<?php endif; ?>
+
+<br><br>

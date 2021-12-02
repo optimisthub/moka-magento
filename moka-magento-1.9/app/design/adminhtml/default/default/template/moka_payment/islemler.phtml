@@ -1,0 +1,324 @@
+<?php
+/**
+
+	Uretici..........: Moka 
+	Yazılımın Adı....: Moka_Payment // Magento için Moka ödeme sistemi entegrasyonu
+	Geliştiren.......: Hidayet Ok <hidayet@grinet.com.tr>
+	Web..............: https://www.moka.com/
+
+	/// Yasal Uyarı /////////////////////////////////////////////////////////////////////////
+
+	TurkPay Ücretli dağıtılan bir yazılımdır. 
+
+	Tüm hakları MOKA ÖDEME KURULUŞU A.Ş.'ne aittir.
+
+
+	
+
+*/
+?>
+<?php 
+
+	$_order = $this->getOrder();
+	$_all_items = $this->Islemler(); 
+
+	if (isset($_all_items[0])) 
+	{
+		$_items		= $_all_items[0];
+	} // if sonu
+	else 
+	{
+		$_items = array();
+	} // else sonu
+	
+	if (isset($_all_items[1])) 
+	{
+		$_old_items	= $_all_items[1];
+	} // if sonu
+	else 
+	{
+		$_old_items = array();
+	} // else sonu
+	
+	$turkpay = Mage::getModel('Moka_Payment_Model_Grinet');
+
+?>
+<h3><?php echo __('GriNet Moka / Kredi Kartı İşlem Detayları');?></h3>
+
+<style type="text/css">
+	.grinet_log_detail,
+	table.debug_lines tr td
+	{
+		font-family:'courier new',fixedsys,'sans serif';
+		width:auto !important;
+	}
+</style>
+
+<div class="grid np">
+  <div class="hor-scroll">
+	<h3><?php echo __('Bu Siparişteki İşlem Detayları');?></h3>
+    <table cellspacing="0" class="data order-tables">
+        <col width="1" />
+        <col width="1" />
+        <col width="1" />
+        <col />
+        <thead>
+            <tr class="headings">
+                <th style="width:40px;"	><?php echo __('ID') ?></th>
+                <th				nowrap><?php echo __('Tarih') ?></th>
+                <th style="width:150px;"><?php echo __('Banka Order ID') ?></th>
+                <th style="width:40px;"	><?php echo __('Banka') ?></th>
+                <th style="width:40px;"	><?php echo __('Taksit') ?></th>
+                <th style="width:100px;"><?php echo __('Tutar') ?></th>
+                <th style="width:100px;"><?php echo __('Moka Tutar') ?></th>
+                <th style="width:40px;"	><?php echo __('RC') ?></th>
+                <th style="width:100px;"><?php echo __('IP') ?></th>
+                <th style="width:100px;"><?php echo __('Detay') ?></th>
+            </tr>
+        </thead>
+        <?php 
+
+			if (count($_items) < 1) 
+			{
+				?>
+					<tbody style="background-color:lightyellow;">
+						<tr class="border">
+							<td colspan="15" style="padding-left:10px;">
+								<?php echo __('Bu siparişte hiç sanal pos işlemi yapılmamıştır.') ?>
+							</td>
+						</tr>
+					</tbody>
+				<?php
+			} // if sonu
+			else 
+			{
+				foreach ($_items as $_item)
+				{
+					$trans_id=intval($_item['trans_id']);
+
+					if($_item['moka_response_code'] == "AUTHORIZED")
+					{
+						$status_class="acquired";
+					} // else sonu
+					else 
+					{
+						$status_class="odd";
+					} // else sonu
+
+					?>
+					<tbody class="<?php echo $status_class;?>">
+						<tr class="border">
+							<td width="30"><?php echo $trans_id ?></td>
+							<td nowrap><?php echo $_item['trans_date'] ?></td>
+							<td width="130"><?php echo $_item['banka_order_id'] ?></td>
+							<td width="40"><?php echo $_item['moka_banka'] ?></td>
+							<td width="40"><?php echo $_item['moka_taksit'] ?></td>
+							<td width="50"><?php echo $_item['grand_total'] ?></td>
+							<td width="50"><?php echo @$_item['moka_total'] ?></td>
+							<td width="30"><?php echo $_item['moka_response_code'] ?></td>
+							<td width="150"><?php echo $_item['customer_ip'] ?>&nbsp;<a href="http://www.whois.sc/<?php echo $_item['customer_ip'] ?>" target="whois">[Whois]</a>&nbsp;<a href="http://www.geoiptool.com/en/?IP=<?php echo $_item['customer_ip'] ?>" target="geo">[Geo]</a></td>
+							<td width="60">
+								<input type="button" value="<?php echo __('Göster'); ?>"	style="display:block;padding:0px;"	class="detail_show_button" id="detail_show_<?php echo $trans_id ?>" onclick="$('detail_<?php echo $trans_id ?>').show();$('detail_hide_<?php echo $trans_id ?>').show();$('detail_show_<?php echo $trans_id ?>').hide();">
+								<input type="button" value="<?php echo __('Gizle'); ?>"		style="display:none;padding:0px;"	class="detail_show_button" id="detail_hide_<?php echo $trans_id ?>" onclick="$('detail_<?php echo $trans_id ?>').hide();$('detail_hide_<?php echo $trans_id ?>').hide();$('detail_show_<?php echo $trans_id ?>').show();">
+							</td>
+						</tr>
+						<tr class="border">
+							<td style="padding:0px;margin:0px;padding-left:20px;color:red;background:white;" colspan="16">
+							<?php
+							if (@$_item["customer_message"] != "") 
+							{
+									echo "<b>".__('Müşteri Mesajı')."</b> : ".$_item['customer_message'];
+									echo "<br>";
+									echo "<b>".__('Sistem Hata Mesajı')."</b> : ".$_item['moka_message'];
+							} // if sonu
+							?>
+								<div id="detail_<?php echo $trans_id?>" style="display:none;color:black;">
+									<p>
+									<h2><?php echo __('3D Secure Sent'); ?></h2>
+									<?php if (isset($_item['data_1_send'])) {echo highlight_string(str_replace("\'","'",stripslashes($_item['data_1_send'])),true);} ?>
+									<p>
+									<h2><?php echo __('3D Secure Response'); ?></h2>
+									<?php if (isset($_item['data_1_response'])) {echo highlight_string(str_replace("\'","'",$_item['data_1_response']),true);} ?>
+									<p>
+									<h2><?php echo __('Payment Sent'); ?></h2>
+									<?php if (isset($_item['data_2_send'])) {echo highlight_string(str_replace("\'","'",stripslashes($_item['data_2_send'])),true);} ?>
+									<p>
+									<h2><?php echo __('Payment Response'); ?></h2>
+									<?php if (isset($_item['data_2_response'])) {echo highlight_string(str_replace("\'","'",$_item['data_2_response']),true);} ?>
+									<p>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				<?php 
+				} 
+			} // else sonu
+		?>
+    </table>
+
+	<br>
+	<h3><?php echo __('Diğer Siparişlerdeki İşlem Detayları');?></h3>
+    <table cellspacing="0" class="data order-tables">
+        <col width="1" />
+        <col width="1" />
+        <col width="1" />
+        <col />
+        <thead>
+            <tr class="headings">
+                <th style="width:40px;"	><?php echo __('ID') ?></th>
+                <th				nowrap><?php echo __('Tarih') ?></th>
+                <th style="width:40px;"	><?php echo __('Sipariş No') ?></th>
+                <th style="width:150px;"><?php echo __('Banka Order ID') ?></th>
+                <th style="width:40px;"	><?php echo __('Banka') ?></th>
+                <th style="width:40px;"	><?php echo __('Taksit') ?></th>
+                <th style="width:100px;"><?php echo __('Tutar') ?></th>
+                <th style="width:100px;"><?php echo __('Moka Tutar') ?></th>
+                <th style="width:40px;"	><?php echo __('RC') ?></th>
+                <th style="width:100px;"><?php echo __('IP') ?></th>
+                <th style="width:100px;"><?php echo __('Detay') ?></th>
+            </tr>
+        </thead>
+        <?php 
+
+			if (count($_old_items) < 1) 
+			{
+				?>
+					<tbody style="background-color:lightyellow;">
+						<tr class="border">
+							<td colspan="20" style="padding-left:10px;">
+								<?php echo __('Başka kredi kartı işlemi bulunamadı.') ?>
+							</td>
+						</tr>
+					</tbody>
+				<?php
+			} // if sonu
+			else 
+			{
+
+				foreach ($_old_items as $_item)
+				{
+					$trans_id=intval($_item['trans_id']);
+
+					if($_item['moka_status'] == "SUCCESS")
+					{
+						$status_class="acquired";
+					} // else sonu
+					elseif($_item['moka_response_code'] != "SUCCESS")
+					{
+						$status_class="acquired-wait";
+					} // else sonu
+					else 
+					{
+						$status_class="odd";
+					} // else sonu
+
+					?>
+					<tbody>
+						<tr class="border <?php echo $status_class;?>">
+							<td><?php echo $trans_id ?></td>
+							<td nowrap><?php echo $_item['trans_date'] ?></td>
+							<td><a href="<?php echo str_replace("/moka/","/admin/",Mage::helper('adminhtml')->getUrl('/sales_order/view/order_id/'.$_item['real_order_id']));?>"><?php echo $_item['order_id'] ?></a></td>
+							<td><?php echo $_item['banka_order_id'] ?></td>
+							<td><?php echo $_item['moka_banka'] ?></td>
+							<td><?php echo $_item['moka_taksit'] ?></td>
+							<td><?php echo $_item['grand_total'] ?></td>
+							<td><?php echo $_item['moka_total'] ?></td>
+							<td><?php echo $_item['moka_response_code'] ?></td>
+							<td><?php echo $_item['customer_ip'] ?>&nbsp;<a href="http://www.whois.sc/<?php echo $_item['customer_ip'] ?>" target="whois">[Whois]</a>&nbsp;<a href="http://www.geoiptool.com/en/?IP=<?php echo $_item['customer_ip'] ?>" target="geo">[Geo]</a></td>
+							<td>
+								<input type="button" value="<?php echo __('Göster'); ?>"	style="display:block;padding:0px;"	class="detail_show_button" id="detail_show_<?php echo $trans_id ?>" onclick="$('detail_<?php echo $trans_id ?>').show();$('detail_hide_<?php echo $trans_id ?>').show();$('detail_show_<?php echo $trans_id ?>').hide();">
+								<input type="button" value="<?php echo __('Gizle'); ?>"		style="display:none;padding:0px;"	class="detail_show_button" id="detail_hide_<?php echo $trans_id ?>" onclick="$('detail_<?php echo $trans_id ?>').hide();$('detail_hide_<?php echo $trans_id ?>').hide();$('detail_show_<?php echo $trans_id ?>').show();">
+							</td>
+						</tr>
+						<tr class="border">
+							<td style="padding:0px;margin:0px;padding-left:20px;color:red;background:white;" colspan="16">
+							<?php
+							if ($_item["customer_message"] != "") 
+							{
+									echo "<b>".__('Müşteri Mesajı')."</b> : ".$_item['customer_message'];
+									echo "<br>";
+									echo "<b>".__('Sistem Hata Mesajı')."</b> : ".$_item['moka_message'];
+							} // if sonu
+							?>
+								<div id="detail_<?php echo $trans_id?>" style="display:none;color:black;">
+									<p>
+									<h2><?php echo __('3D Secure Sent'); ?></h2>
+									<?php if (isset($_item['data_1_send'])) {echo highlight_string(str_replace("\'","'",$_item['data_1_send']),true);} ?>
+									<p>
+									<h2><?php echo __('3D Secure Response'); ?></h2>
+									<?php if (isset($_item['data_1_response'])) {echo highlight_string(str_replace("\'","'",$_item['data_1_response']),true);} ?>
+									<p>
+									<h2><?php echo __('Payment Sent'); ?></h2>
+									<?php if (isset($_item['data_2_send'])) {echo highlight_string(str_replace("\'","'",$_item['data_2_send']),true);} ?>
+									<p>
+									<h2><?php echo __('Payment Response'); ?></h2>
+									<?php if (isset($_item['data_2_response'])) {echo highlight_string(str_replace("\'","'",$_item['data_2_response']),true);} ?>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				<?php 
+				} 
+			} // else sonu
+		?>
+    </table>
+
+	<br><br>
+	<h3>Satır Renkleri : </h3>
+	<table>
+		<tbody class="acquired" width="300">
+			<tr>
+				<td width="70">Yeşil</td>
+				<td width="10">:</td>
+				<td>Para tahsil edildi</td>
+			</tr>
+		</tbody>
+		<tbody class="acquired-wait" width="300">
+			<tr>
+				<td width="70">Turuncu</td>
+				<td width="10">:</td>
+				<td>Para tahsil edildi ancak <b>İŞLEM İNCELEMEDE</b></td>
+			</tr>
+		</tbody>
+		<tbody class="odd">
+			<tr>
+				<td>Beyaz</td>
+				<td>:</td>
+				<td>Başarısız İşlem</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<br><br>
+	<h3>Kısaltmalar : </h3>
+	<table>
+		<tr>
+			<td>Tutar</td>
+			<td>:</td>
+			<td>Çekilmek üzere bankaya bildirilen miktar. Eğer satır yeşilse bu miktar çekildi demektir.</td>
+		</tr>
+		<tr>
+			<td>M.Ülke</td>
+			<td>:</td>
+			<td>Müşteri tarafından bildirilen ülke</td>
+		</tr>
+		<tr>
+			<td>IP Ülke</td>
+			<td>:</td>
+			<td>Sistem tarafından tespit edilen, müşterinin sipariş verirken bulunduğu ülke</td>
+		</tr>
+		<tr>
+			<td>RC</td>
+			<td>:</td>
+			<td>moka.com dan dönen durum kodu. 
+			<br>1 veya 2 : Para çekildi
+			<br>Diğer kodlar : Para çekilemedi
+			</td>
+		</tr>
+	</table>
+  </div>
+</div>
+
+<?php
+
+?>

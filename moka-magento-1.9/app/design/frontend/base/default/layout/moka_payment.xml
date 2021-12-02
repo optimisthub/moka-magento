@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<layout version="0.1.0">
+
+	<catalog_product_view>
+		<reference name="product.info">
+			<block type="catalog/product_view_tabs">
+				<action method="addTab" translate="title" module="moka"><alias>taksit.secenekleri</alias><title>Taksit Seçenekleri</title><block>core/template</block><template>moka_payment/urun_detay_taksit_coklu.phtml</template></action>
+			</block>
+		</reference>
+	</catalog_product_view>
+
+	<grinet_grinet_redirect>
+		<reference name="content">
+			<!-- <block type="page/html" name="redirect" template="moka_payment/redirect.phtml"></block> -->
+		</reference>
+		<reference name="head">
+			<action method="addCss"><stylesheet>css/moka_payment.css</stylesheet></action>
+		</reference>
+	</grinet_grinet_redirect>
+
+	<default>
+		<reference name="head">
+			<action method="addCss"><stylesheet>css/moka_payment.css</stylesheet></action>
+		</reference>
+	</default>
+
+</layout>

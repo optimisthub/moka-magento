@@ -1,0 +1,19 @@
+<layout>    
+	<default>
+		<reference name="head">
+			<action method="addCss"><stylesheet>moka_payment.css</stylesheet></action>
+			<!-- <action method="addJs"><script>jquery/jquery-1.4.min.js</script></action>
+			<action method="addJs"><script>jquery/jquery-noconflict.js</script></action> -->
+		</reference>
+	</default>
+    <adminhtml_sales_order_view> 
+        <reference name="sales_order_tabs">
+                <action method="addTab"><name>moka_islemler</name><block>moka/Adminhtml_Sales_Order_View_Tab_Islemler</block></action>
+        </reference>
+    </adminhtml_sales_order_view> 
+    <!-- <adminhtml_customer_edit> 
+        <reference name="sales_order_tabs">
+                <action method="addTab"><name>islemler</name><block>moka/Adminhtml_Sales_Order_View_Tab_Islemler</block></action>
+        </reference>
+    </adminhtml_customer_edit>  -->
+</layout> 

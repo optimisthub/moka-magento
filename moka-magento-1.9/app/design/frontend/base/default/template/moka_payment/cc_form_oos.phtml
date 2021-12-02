@@ -1,0 +1,215 @@
+<?php
+/** 12.5.2015
+
+	Uretici..........: Moka 
+	Yazılımın Adı....: moka_payment // Magento için Moka ödeme sistemi entegrasyonu
+	Geliştiren.......: Hidayet Ok <hidayet@grinet.com.tr>
+	Web..............: https://www.moka.com/
+
+	/// Yasal Uyarı /////////////////////////////////////////////////////////////////////////
+
+	TurkPay Ücretli dağıtılan bir yazılımdır. 
+
+	Tüm hakları MOKA ÖDEME KURULUŞU A.Ş.'ne aittir.
+
+
+	
+	////////////// Gomage scripti ///////////////////////////////
+	<script>
+		jQuery(".moka_taksit").change(function(){
+			turkpay_change();
+		});
+        
+		function turkpay_change()
+		{
+			checkout.submit(checkout.getFormData(),'get_totals');
+		}
+	</script>
+
+
+
+*/
+
+?>
+<fieldset class="form-list">
+<?php $_method_code=$this->getMethodCode() ?>
+<?php
+
+	$moka			= Mage::getModel('Moka_Payment_Model_Grinet');
+
+	$quote			= Mage::getSingleton('checkout/session')->getQuote();
+	$kupon_kodu		= $quote->getCouponCode();
+
+	// Ayarlar
+	$bank_code="moka";
+	$taksit_yerlesimi	= Mage::getStoreConfig('moka/taksitler/taksit_yerlesimi');
+
+	$items = $quote->getAllItems();
+	$sepet_toplam=0;
+	$fark=0;
+
+	$prod_model = Mage::getModel('catalog/product');
+
+	$taksit_kapat = false;
+	foreach($items as $item) {
+		$prod = $prod_model->load($item->getProductId());
+		if ($prod->getData('taksitsiz_urun') == 1) {$taksit_kapat = true;} // if sonu
+		
+		$sepet_toplam+=$item->getBaseRowTotalInclTax()-$item->getDiscountAmount();
+	}
+
+	//  $sepet_toplam=number_format($sepet_toplam,2);
+
+	//$tutar = $sepet_toplam;
+	$tutar = floatval($quote->getBaseGrandTotal());
+	$kargo = floatval($quote->getShippingAddress()->getShippingAmount());
+
+	$fark= $tutar - $sepet_toplam;
+	$tutar = $tutar - $fark;
+	
+	if ($quote->getData('global_currency_code') != $quote->getData('quote_currency_code')) 
+	{
+		$kur=$quote->getData('store_to_quote_rate');
+		$sepet_toplam	= $sepet_toplam * $kur;
+		$tutar			= $tutar * $kur;
+		$fark			= $fark * $kur;
+	} // if sonu
+
+	if ($this->getLicense() != "0") 
+	{
+		echo "<h3 style='font-size:13px;color:red'>GriNet PAYU Lisansı bulunamadı. Hata : ".$this->getLicense()." </h3>";
+	} // if sonu
+	
+	?>
+	<table id="payment_form_<?php echo $_method_code ?>" width="100%" style="display:none;">
+		<tr>
+		<td valign="top">
+		<h2>Bu ekranda taksit seçiminizi yaptıktan sonra ödemenizi tamamlamak üzere ödeme firmasının sayfasına yönlendirileceksiniz.</h2>
+		<?php
+				if (Mage::getStoreConfig($bank_code.'/taksitler/taksit') == "1") 
+				{
+					if ($taksit_kapat !== true) 
+					{
+					?>
+						<div class="input-box taksit" id="taksit_<?php echo $bank_code?>" style="width:auto;">
+							<div class="taksit_container_<?php echo $bank_code; ?>">
+								<?php
+								//Taksit Datası 
+
+								$tdata = $moka->taksitler($bank_code,$tutar);
+
+								$i=1;
+								if (count($tdata) > 0) 
+								{
+									?>
+										<table cellpadding="4" width="100%" id="taksit_tablo_<?php echo $bank_code; ?>">
+											<tr class="taksit_head_3">
+												<td colspan="3">
+													<?php echo $this->__('Taksit Seçiniz') ?><span class="required">*</span>
+												</td>
+											</tr>
+											<tr class="taksit_head">
+												<td><?php echo __('Taksit Sayısı');?></td>
+												<td><?php echo __('Aylık Ödeme');?></td>
+												<td><?php echo __('Toplam Ödenecek');?></td>
+											</tr>
+											
+											
+											<?php
+											/// Banka detayında tek çekim
+											if (isset($tdata[0]) and strlen(isset($tdata[0])) > 0) 
+											{
+												$toran=$tdata[0];
+												if ($toran < 0) 
+												{
+													$trans=array(
+																	"{{komisyon}}" => ($toran * -1),
+																	);
+													$indirim_yazisi= strtr(__(' ( %{{komisyon}} indirimli )'),$trans);
+												} // if sonu
+												else 
+												{
+													$indirim_yazisi="";
+												} // else sonu
+												
+												$tekcekim_tutar = $tutar + ( ( $tutar / 100 ) * floatval($toran) ) + $fark; //+ ( ( $fark / 100 ) * floatval($toran) );
+												
+
+												$custom_title=Mage::getStoreConfig($bank_code.'/taksit_baslik/taksit_0');
+												if (trim($custom_title) == "") 
+												{
+													$taksit_title=__('Tek Çekim');
+												} // if sonu
+												else 
+												{
+													$taksit_title=$custom_title;
+												} // else sonu
+												
+												?>
+												<tr class="taksit_satir0">
+													<td class="taksit_c1" colspan="2" nowrap><INPUT class="moka_taksit" TYPE="radio" NAME="payment[moka_payment_taksit_<?php echo $bank_code?>]" CHECKED value="0"> <?php echo $taksit_title;?> <?php echo $indirim_yazisi;?></td>
+													<td class="taksit_c3"><?php echo $this->helper('checkout')->formatPrice($tekcekim_tutar);?></td>
+												</tr>
+												<?php
+											} // if sonu
+
+											foreach($tdata as $tay => $toran)
+											{
+												$toplam_tutar = $tutar + ( ( $tutar / 100 ) * floatval($toran) ) + $fark;// - ( ( $fark / 100 ) * floatval($toran) ) ;
+												
+												if (!isset($satir)) {$satir=1;}
+												if ($satir == 2) {$satir=1;} else {$satir=2;} 
+												if ($tay > 0) 
+												{
+													$custom_title=Mage::getStoreConfig($bank_code.'/taksit_baslik/taksit_'.$tay);
+
+													if (trim($custom_title) == "") 
+													{
+														$taksit_title=$tay." ".__('Taksit');
+													} // if sonu
+													else 
+													{
+														$taksit_title=$custom_title;
+													} // else sonu
+													?>
+														<tr class="taksit_satir<?php echo $satir;?>">
+															<td class="taksit_c1" nowrap><INPUT class="moka_taksit" TYPE="radio" NAME="payment[moka_payment_taksit_<?php echo $bank_code?>]" value="<?php echo $tay;?>"> <span class="taksit_baslik_<?php echo $tay;?>"><?php echo $taksit_title;?></span></td>
+															<td class="taksit_c2"><?php echo $this->helper('checkout')->formatPrice($toplam_tutar/$tay);?></td>
+															<td class="taksit_c3"><?php echo $this->helper('checkout')->formatPrice($toplam_tutar);?></td>
+														</tr>
+													<?php
+												} // if sonu
+												++$i;
+											} // foreach sonu
+											?>
+										</table>
+									<?php
+								} // if sonu
+								else 
+								{	// Taksit yok
+									?>
+										<input type="hidden" name="payment[moka_payment_taksit]" value="0">
+									<?php
+								} // else sonu
+							?>
+							</div>
+						</div>
+					<?php 
+					}
+					else 
+					{
+						?>
+							<div class="input-box taksit taksit_kapat" id="taksit_<?php echo $bank_code?>" style="width:auto; color:darkred; font-size:13px; font-weight:bold;">
+								<input type="hidden" name="payment[moka_payment_taksit]" value="0">
+								<?php echo __('Sepetinizde taksit yapılamayan bir ürün olduğundan taksit kapalıdır.');?>
+							</div>
+						<?php					
+					} // else sonu
+				} // if sonu
+				?>
+			</td>
+		  </tr>
+		</table>
+	</fieldset>
+<?php		
+	
